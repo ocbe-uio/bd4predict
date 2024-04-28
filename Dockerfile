@@ -10,9 +10,9 @@ VOLUME ["/code"]
 
 # Install dependencies:
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-EXPOSE 8070
+EXPOSE 3100
 
 COPY . .
 

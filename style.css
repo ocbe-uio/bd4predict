@@ -1,0 +1,95 @@
+html {
+	height: 100%; /* Make sure the parent has a defined height */
+    margin: 0;    /* Remove the default margin */
+}
+
+.body {
+	display: flex;
+    font-family: Arial, sans-serif;
+	justify-content: center;
+	align-items: center;
+    margin: 20px;
+    background-color: #f2f2f2;
+}
+
+h1, h2, h3 {
+    text-align: center;
+}
+
+.highlight {
+    font-weight: bold;
+    color: #3c75b561; /* Just an example - any color you like */
+}
+
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="number"],
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+input[type="submit"] {
+	
+    background-color: #4CAF50;
+
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Ensures full width on mobile */
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.flex-container {
+
+	max-width: 800px;
+	width: 100%;       
+    margin: auto; 
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; 
+
+}
+
+.form-container,
+.details-container {
+
+    flex-basis: 30%; /* Calculates width while accounting for margins */
+    margin: 20px 10px;
+}
+.form-style {
+    max-width: 210px;
+    margin: 20px auto; /* Updated to add some top and bottom margin */
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .flex-container {
+        flex-direction: column;
+
+    }
+    .form-container,
+    .details-container {
+        flex-basis: auto; /* Flex basis set to auto for mobile view */
+    }
+}
+
+.imputed-input {
+    background-color: #278f90;  /* Light blue background */
+  }

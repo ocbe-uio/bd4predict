@@ -1,18 +1,13 @@
 from fastapi import FastAPI
 from app.backend import (
     make_prediction,
+    pd,
     TimingMiddleware,
 )
-from pydantic import BaseModel, Field
-from app.backend import *
+from pydantic import BaseModel
 from typing import Dict
 
-description = (
-    " \n"
-    "## Endpoints: \n"
-    "- **/predict/** \n"
-
-)
+description = " \n" "## Endpoints: \n" "- **/predict/** \n"
 
 
 app = FastAPI(
@@ -34,10 +29,6 @@ app = FastAPI(
 
 app.add_middleware(TimingMiddleware)
 
-
-
-
-from pydantic import BaseModel
 
 class PredictionRequest(BaseModel):
     hn1_dv_age_cons: int = 42
@@ -85,16 +76,13 @@ class PredictionRequest(BaseModel):
     hn3_dv_hn35_cough: float = -1
 
 
-
 # Pydantic model definitions for the responses
 class PredictionResponse(BaseModel):
-    predicted_value: float =  73
+    predicted_value: float = 73
     ci: list = [60.0, 83.0]
     decline_probability: float = 0.7
     conformal_predictive_distribution: list = [0.0, 0.0, 3.0, 4.5]
     imputation: Dict
-
-
 
 
 @app.get("/")
@@ -109,26 +97,23 @@ async def root():
 
 
 # make prediction
-@app.post("/predict/", response_model = PredictionResponse)
+@app.post("/predict/", response_model=PredictionResponse)
 async def predict(patient_data: PredictionRequest) -> Dict:
     """
     This endpoint returns a prediction based on the input data.
     """
     print(patient_data)
-    patient_data = pd.DataFrame(patient_data.dict(), index = [0])
+    patient_data = pd.DataFrame(patient_data.dict(), index=[0])
 
-    model = 'models/reduced_conformal_lasso_ghs.pkl'
+    model = "models/reduced_conformal_lasso_ghs.pkl"
 
     response = make_prediction(patient_data, model)
 
     return response
-    
-
-
 
 
 if __name__ == "__main__":
     # run rest api with uvicorn
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8070, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=3100, log_level="info")
