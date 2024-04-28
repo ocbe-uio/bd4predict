@@ -7,6 +7,7 @@ from app.backend import (
     MapieConformalPredictiveDistribution
 )
 from app.schemas import PredictionRequest, PredictionResponse
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict
 
 
@@ -35,6 +36,14 @@ app = FastAPI(
 )
 
 app.add_middleware(TimingMiddleware)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins, adjust this in production
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods, consider narrowing this down to what you use
+    allow_headers=["*"],  # Allows all headers, consider narrowing this down as well
+    )
 
 @app.get("/")
 async def root():
