@@ -130,7 +130,7 @@ def get_explainability(patient_data, model):
 
     return explanation
 
-def predict(patient_data: pd.DataFrame, model) -> Dict:
+def make_prediction(patient_data: pd.DataFrame, model) -> Dict:
     """
     This function returns the prediction based on the input data.
     :param patient_data: the input data
@@ -166,7 +166,7 @@ def predict(patient_data: pd.DataFrame, model) -> Dict:
         'ci': ci.tolist(),
         'decline_probability': decline_probability[0],
         'conformal_predictive_distribution': y_cdf[0].tolist(),
-        'imputation': imputed_data.map(make_integer).to_dict(orient='records')
+        'imputation': imputed_data.map(make_integer).to_dict(orient='records')[0]
         }
 
     return prediction
