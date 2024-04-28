@@ -6,7 +6,6 @@ from typing import Dict
 from mapie.regression import MapieRegressor
 import pandas as pd
 import numpy as np
-import pickle
 
 # for custom logging
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
@@ -14,6 +13,14 @@ from starlette.requests import Request
 from starlette.responses import Response
 import time
 import logging
+import pickle
+
+def load_model(model_path: str):
+    # load the model
+    with open(model_path, "rb") as file:
+        model = pickle.load(file)   
+
+    return model
 
 
 def imputation(data: pd.DataFrame, model) -> pd.DataFrame:
@@ -159,9 +166,6 @@ def make_prediction(patient_data: pd.DataFrame, model) -> Dict:
         lambda x: x.where(x >= 0, np.nan) if np.issubdtype(x.dtype, np.number) else x
     )
 
-    # load the model
-    with open(model, "rb") as file:
-        model = pickle.load(file)
 
     imputed_data = imputation(df, model)
 
@@ -205,3 +209,4 @@ class TimingMiddleware(BaseHTTPMiddleware):
                     Response time: {process_time:.5f}s"
         )
         return response
+
