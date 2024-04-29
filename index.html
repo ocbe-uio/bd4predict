@@ -384,7 +384,7 @@
 function displayImputation(data, userInput) {
   const form = document.getElementById('myForm');
 
-  const imputationData = data.imputation && data.imputation[0];
+  const imputationData = data.imputation;
   if (!imputationData) {
     console.warn('No data returned');
     return;
