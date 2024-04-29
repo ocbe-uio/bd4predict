@@ -37,6 +37,10 @@ app = FastAPI(
 
 app.add_middleware(TimingMiddleware)
 
+# recommended
+# allow_origins=["https://yourdashboarddomain.com", "http://localhost:3000"],  # Example
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allows all origins, adjust this in production
@@ -63,7 +67,7 @@ async def predict(patient_data: PredictionRequest) -> Dict:
     This endpoint returns a prediction based on the input data.
     """
     
-    patient_data = pd.DataFrame(patient_data.dict(), index=[0])
+    patient_data = pd.DataFrame(patient_data.model_dump(), index=[0])
 
     response = make_prediction(patient_data, model)
 
@@ -74,4 +78,4 @@ if __name__ == "__main__":
     # run rest api with uvicorn
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=8001, log_level="info")

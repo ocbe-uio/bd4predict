@@ -325,9 +325,9 @@
 		formDataJson[key] = parseIfNumeric(value);
 	  }
   
-	  fetch('http://127.0.0.1:3100/predict', {
+	  fetch('https://bd4predict.azurewebsites.net/predict/', {
 		method: 'POST',
-		credentials: 'include',
+		// credentials: 'include',
 		headers: {
 		  'Content-Type': 'application/json',
 		  'Accept': 'application/json'

@@ -180,7 +180,7 @@ def make_prediction(patient_data: pd.DataFrame, model) -> Dict:
     )
 
     ci = np.quantile(y_cdf, [0.025, 0.975])
-
+    
     prediction = {
         "predicted_value": result[0],
         "ci": ci.tolist(),
