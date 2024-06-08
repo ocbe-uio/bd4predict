@@ -13,7 +13,8 @@ from typing import Dict
 
 MapieConformalPredictiveDistribution = MapieConformalPredictiveDistribution
 
-model = load_model(model_path = "models/reduced_conformal_lasso_ghs.pkl")
+model_decline = load_model(model_path = "models/reduced_conformal_lasso_ghs.pkl")
+model_survival = load_model(model_path = "models/reduced_logreg_survival.pkl")
 
 description = " \n" "## Endpoints: \n" "- **/predict/** \n"
 
@@ -69,7 +70,7 @@ async def predict(patient_data: PredictionRequest) -> Dict:
     
     patient_data = pd.DataFrame(patient_data.model_dump(), index=[0])
 
-    response = make_prediction(patient_data, model)
+    response = make_prediction(patient_data, model_decline, model_survival)
 
     return response
 

@@ -53,5 +53,7 @@ class PredictionResponse(BaseModel):
     predicted_value: float = 73
     ci: list = [60.0, 83.0]
     decline_probability: float = 0.7
+    death_probability: float = 0.3
+    joint_probability: float = 0.9
     conformal_predictive_distribution: list = [0.0, 0.0, 3.0, 4.5]
     imputation: Dict

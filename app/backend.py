@@ -151,11 +151,12 @@ def get_explainability(patient_data, model):
     return explanation
 
 
-def make_prediction(patient_data: pd.DataFrame, model) -> Dict:
+def make_prediction(patient_data: pd.DataFrame, model_decline, model_survival) -> Dict:
     """
     This function returns the prediction based on the input data.
     :param patient_data: the input data
-    :param model: the model to use for prediction
+    :param model_decline: the model to use for predicting decline
+    :param model_survival: the model to use for predicting survival
     :return: the prediction
     """
     df = pd.DataFrame(data=patient_data, index=[0])
@@ -167,15 +168,19 @@ def make_prediction(patient_data: pd.DataFrame, model) -> Dict:
     )
 
 
-    imputed_data = imputation(df, model)
+    imputed_data = imputation(df, model_decline)
 
-    result = model.predict(df)
+    result = model_decline.predict(df)
 
-    decline_probability = model.predict_proba(
+    death_probability = model_survival.predict_proba(df)[:, 1]
+
+    decline_probability = model_decline.predict_proba(
         df, lower=imputed_data["hn3_dv_c30_ghs"] - 10
     )
 
-    y_cdf = model.named_steps["regressor"].get_cumulative_distribution_function(
+    joint_probability = decline_probability*(1.0 - death_probability) + death_probability
+
+    y_cdf = model_decline.named_steps["regressor"].get_cumulative_distribution_function(
         df, result
     )
 
@@ -185,6 +190,8 @@ def make_prediction(patient_data: pd.DataFrame, model) -> Dict:
         "predicted_value": result[0],
         "ci": ci.tolist(),
         "decline_probability": decline_probability[0],
+        "death_probability": death_probability[0],
+        "joint_probability": joint_probability[0],
         "conformal_predictive_distribution": y_cdf[0].tolist(),
         "imputation": imputed_data.map(make_integer).to_dict(orient="records")[0],
     }
