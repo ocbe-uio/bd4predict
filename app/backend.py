@@ -6,6 +6,7 @@ from typing import Dict
 from mapie.regression import MapieRegressor
 import pandas as pd
 import numpy as np
+import shap
 
 # for custom logging
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
@@ -146,7 +147,9 @@ def get_explainability(patient_data, model):
     :return: the explanation
     """
 
-    explanation = None
+    explainer = shap.Explainer(model.named_steps['regressor'].estimator_.estimators_[0])
+
+    explanation = explainer.shap_values(patient_data)
 
     return explanation
 
@@ -178,7 +181,9 @@ def make_prediction(patient_data: pd.DataFrame, model_decline, model_survival) -
         df, lower=imputed_data["hn3_dv_c30_ghs"] - 10
     )
 
-    joint_probability = decline_probability*(1.0 - death_probability) + death_probability
+    death_decline_probability = decline_probability*(1.0 - death_probability) + death_probability
+
+    joint_decline_probability = decline_probability * (1.0 - death_probability)
 
     y_cdf = model_decline.named_steps["regressor"].get_cumulative_distribution_function(
         df, result
@@ -191,7 +196,8 @@ def make_prediction(patient_data: pd.DataFrame, model_decline, model_survival) -
         "ci": ci.tolist(),
         "decline_probability": decline_probability[0],
         "death_probability": death_probability[0],
-        "joint_probability": joint_probability[0],
+        "death_decline_probability": death_decline_probability[0],
+        "joint_decline_probability": joint_decline_probability[0],
         "conformal_predictive_distribution": y_cdf[0].tolist(),
         "imputation": imputed_data.map(make_integer).to_dict(orient="records")[0],
     }
