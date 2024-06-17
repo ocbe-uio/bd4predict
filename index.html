@@ -3,6 +3,7 @@
 <head>
 	<title>BD4QoL :: Clinical Prediction Model Dashboard</title>
     <link rel="stylesheet" href="style.css">
+	
 	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 	<script>
 		
@@ -297,7 +298,7 @@
 	<h2> Results </h2>
 
 
-	<div id="probabilities-container" style="width: 500px; height: 30px; ">
+	<div id="probabilities-container" style="width: 500px; height: 100px; ">
         <!-- The probabilities will appear here -->
     </div>
 
@@ -439,12 +440,16 @@ function displayProbability(data) {
 
 	// Format the probability as a percentage (assuming it's delivered as a decimal like 0.15 for 15%)
     const declineProbabilityPercent = (data.decline_probability * 100).toFixed(2) + '%';
+	const jointProbabilityPercent = (data.joint_decline_probability * 100).toFixed(2) + '%';
+	const survivalProbabilityPercent =  ((1.-data.death_probability) * 100).toFixed(2) + '%';
 
     // Create a span element to highlight the probability
-	const probabilitySpan = `<span class="highlight">${declineProbabilityPercent}</span>`;
+	//const probabilitySpan = `<span class="highlight">${declineProbabilityPercent}</span>`;
 
 	// Build the HTML string
-	const htmlContent = `<p>Probability of decline: ${probabilitySpan}</p>`;
+	const htmlContent = `<p>Probability of decline: ${declineProbabilityPercent}</p>
+						 <p>Probability of surving and decline: ${jointProbabilityPercent}</p>
+						 <p>Survival probability: ${survivalProbabilityPercent}</p>`;
 
 	// Assign the constructed HTML to the container's innerHTML
 	container.innerHTML = htmlContent;
@@ -457,7 +462,7 @@ function displayPredictedValue(data){
 	const predictedValue = data.predicted_value.toFixed(2);
 	const ci = data.ci.map(value => value.toFixed(2));
 
-	container.innerHTML = `<p>Predicted value [95% ci]: ${predictedValue} [ ${ci} ]</p>`;
+	container.innerHTML = `<p>Predicted value [PI: 95%]: ${predictedValue} [ ${ci} ]</p>`;
 
 }
 
