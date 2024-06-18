@@ -135,26 +135,6 @@ def make_integer(x):
         return x
 
 
-def get_explainability(patient_data, model):
-    """
-    // to be implemented
-
-    This function returns single explanability with
-    shapley values for the prediction based on the input data.
-    :param patient_data: the input data
-    :param model: the model to use for prediction
-    :return: the explanation
-    """
-
-    explainer = lambda x: "not implemented yet"
-    explanation = explainer(patient_data)
-    
-    #explainer = shap.Explainer(model.named_steps['regressor'].estimator_.estimators_[0])
-
-    #explanation = explainer.shap_values(patient_data)
-
-    return explanation
-
 
 def make_prediction(patient_data: pd.DataFrame, model_decline, model_survival) -> Dict:
     """
