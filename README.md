@@ -2,6 +2,21 @@
 
 This document provides an overview of how to use the BD4Predict API for predictive modeling. The API accepts JSON workloads as input and identifies missing data with a value of `-1`.
 
+Contents:
+
+- Endpoint
+   - /predict
+   - Request body
+   - Example with Bash
+   - Example with python
+   - Response
+   - Example response
+- Full description of variables and inputs 
+- Server wakening time
+- Imputation and uncertainty
+- About the BD4QoL project
+- Usage terms
+
 ## Endpoint
 
 ### `/predict`
@@ -32,6 +47,8 @@ The request body should be a JSON object containing the following fields:
 - `hn1_dv_bmi`: Body Mass Index (integer)
 - `hn1_dv_total_wk`: Alcohol consumption in units/week (integer)
 - Additional fields for various health and functional status indicators, which can be set to `-1` if data is missing.
+
+
 
 #### Example with Bash
 ```bash
@@ -197,6 +214,204 @@ The response is a JSON object containing the following fields:
 }
 }
 ```
+
+## Full description of variables and inputs
+
+### Request Body
+
+The request body should be a JSON object containing the following fields:
+
+- **`hn1_dv_age_cons`**: Age of the patient (integer)
+  - **Possible Values**: 18 to 92
+
+- **`hn1_na8_cb_sex`**: Sex of the patient
+  - **Possible Values**:
+    - `0`: Male
+    - `1`: Female
+
+- **`hn1_icd_group_conf`**: Tumor Region (string)
+  - **Possible Values**:
+    - `"1 - oral cavity"`
+    - `"2 - oropharynx"`
+    - `"3 - nasopharynx"`
+    - `"4 - hypopharynx"`
+    - `"5 - larynx"`
+    - `"6 - nasal cavity/sinuses"`
+
+- **`hn1_tnm_stage_best`**: Tumor Staging (integer)
+  - **Possible Values**:
+    - `1`: Stage I
+    - `2`: Stage II
+    - `3`: Stage III
+    - `4`: Stage IV
+
+- **`hn1_a7a_ay_education_level`**: Education Level (integer)
+  - **Possible Values**:
+    - `1`: Maximum 6 years
+    - `2`: Between 7 and 11 years
+    - `3`: 12 to 13 years
+    - `4`: More than 13 years
+    - `-1`: Missing
+
+- **`hn1_a5_ay_marital_status`**: Marital Status (string)
+  - **Possible Values**:
+    - `"1 - single"`
+    - `"2 - widowed"`
+    - `"3 - separated"`
+    - `"4 - married"`
+    - `"5 - divorced"`
+    - `"6 - living with a partner"`
+    - `"missing"`
+
+- **`hn1_imd10quint`**: Regional Deprivation Index (integer)
+  - **Possible Values**:
+    - `0`: Least deprived
+    - `1`: Less deprived
+    - `2`: Middle deprivation
+    - `3`: More deprived
+    - `4`: Most deprived
+    - `-1`: Missing
+
+- **`hn1_dv_a21_ay_hhold_income`**: Household Income (integer)
+  - **Possible Values**:
+    - `1`: Less than £3,999
+    - `2`: £4,000 - £7,999
+    - `3`: £8,000 - £11,999
+    - `4`: £12,000 - £17,999
+    - `5`: £18,000 - £22,999
+    - `6`: £23,000 - £28,999
+    - `7`: £29,000 - £34,999
+    - `8`: £35,000 or more
+    - `-1`: Missing
+
+- **`hn1_nb4_cb_comorb_index`**: Comorbidity Index (integer)
+  - **Possible Values**:
+    - `1`: No comorbidity
+    - `2`: Mild
+    - `3`: Moderate
+    - `4`: Severe
+    - `-1`: Missing
+
+- **`hn1_dv_bmi`**: Body Mass Index (integer)
+  - **Possible Values**: Typically a positive integer (specific range not defined).
+
+- **`hn1_nb9a_cb_hpv_status`**: HPV Status (string)
+  - **Possible Values**:
+    - `"not obtained"`
+    - `"positive"`
+    - `"negative"`
+
+- **`hn1_surgery`**: Surgery Status (integer)
+  - **Possible Values**:
+    - `1`: Yes
+    - `0`: No
+
+- **`hn1_chemotherapy`**: Chemotherapy Status (integer)
+  - **Possible Values**:
+    - `1`: Yes
+    - `0`: No
+
+- **`hn1_radiotherapy`**: Radiotherapy Status (integer)
+  - **Possible Values**:
+    - `1`: Yes
+    - `0`: No
+
+- **`hn1_a8_ay_tobacco`**: Smoking Status (string)
+  - **Possible Values**:
+    - `"3 - never"`
+    - `"2 - former"`
+    - `"1 - current user"`
+    - `"missing"`
+
+- **`hn1_dv_total_wk`**: Alcohol Consumption (integer)
+  - **Possible Values**: Typically a non-negative integer
+
+### EORTC QLQ-C30 Variables
+
+- **`hn3_dv_c30_role_func`**: Role Functioning (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_phys_func`**: Physical Functioning (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_emot_func`**: Emotional Functioning (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_cog_func`**: Cognitive Functioning (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_soc_func`**: Social Functioning (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_fatigue`**: Fatigue (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_nausea`**: Nausea and Vomiting (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_pain`**: Pain (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_dyspnoea`**: Dyspnoea (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_insomnia`**: Insomnia (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_appetite`**: Loss of Appetite (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_constipation`**: Constipation (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_diarrhoea`**: Diarrhoea (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_c30_ghs`**: Global Health Status (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+### HN35 Variables
+
+- **`hn3_dv_hn35_pain`**: Pain (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_speech`**: Speech Problems (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_sex`**: Sexuality (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_drymouth`**: Dry Mouth (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_ill`**: Feeling Ill (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_swallow`**: Swallowing (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_soceat`**: Social Eating (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_teeth`**: Teeth (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_saliva`**: Saliva (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_senses`**: Senses (taste/smell) (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_soccon`**: Social Contacts (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_openmouth`**: Opening Mouth (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+- **`hn3_dv_hn35_cough`**: Cough (integer)
+  - **Possible Values**: 0 to 100, use -1 for missing
+
+
 
 
 ## Server Wakening time
