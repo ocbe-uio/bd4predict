@@ -44,7 +44,15 @@
 		<!-- Main form fields container -->
 	
 		<div class="form-container form-style">
+   
 			<form id="myForm" onsubmit="submitForm(event);">
+                <label for="model">Model:</label>
+                <select id="model" name="model" required>
+                    <option value="" disabled selected>Select model</option>
+                    <option value="reduced_conformal_lasso_ghs">Lasso</option>
+                    <option value="reduced_conformal_xgboost_ghs">XGBoost</option>
+                </select><br><br>
+                
 				<label for="hn1_dv_age_cons">Age:</label>
 				<input type="number" id="hn1_dv_age_cons" name="hn1_dv_age_cons" min="18" max="92" required><br><br>
 				
@@ -316,36 +324,50 @@
 
 
 <script>
-	function submitForm(event) {
-	  event.preventDefault();
-  
-	  const form = document.getElementById('myForm');
-	  const formData = new FormData(form);
-  
-	  const formDataJson = {};
-	  for (const [key, value] of formData.entries()) {
-		formDataJson[key] = parseIfNumeric(value);
-	  }
-  
-	  fetch('https://bd4predict.azurewebsites.net/predict/', {
-		method: 'POST',
-		// credentials: 'include',
-		headers: {
-		  'Content-Type': 'application/json',
-		  'Accept': 'application/json'
-		},
-		body: JSON.stringify(formDataJson),
-	  })
-	  .then(response => response.json())
-	  .then(data => {
-		console.log(data);
-		displayImputation(data, formDataJson);
-		plot_predicted_distribution(data.conformal_predictive_distribution);
-		displayProbability(data);
-		displayPredictedValue(data);
-	  })
-	  .catch((error) => console.error('Error:', error));
-	}
+function submitForm(event) {
+  event.preventDefault();
+
+  const form = document.getElementById('myForm');
+  const formData = new FormData(form);
+
+  const patientData = {};
+  let modelName = "";
+
+  for (const [key, value] of formData.entries()) {
+    if (key === "model") {
+      modelName = value;
+    } else {
+      patientData[key] = parseIfNumeric(value);
+    }
+  }
+
+  const postData = {
+    patient_data: patientData,
+    model: {
+      model_name: modelName,
+      model_type: "decline",
+      model_version: "1.0.0"
+    }
+  };
+
+  fetch('https://bd4predict.azurewebsites.net/predict/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(postData),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    displayImputation(data, patientData);
+    plot_predicted_distribution(data.conformal_predictive_distribution);
+    displayProbability(data);
+    displayPredictedValue(data);
+  })
+  .catch((error) => console.error('Error:', error));
+}
   
 	function parseIfNumeric(value) {
 	  const number = Number(value);
