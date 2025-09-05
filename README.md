@@ -435,5 +435,12 @@ The developers of the BD4Predict tool provide this software as-is, without any e
         
 ## How to cite this software
 
-Moreira-Soares Maurício (2025). BD4Predict: quality of life prediction tool for head and neck cancer survivors. https://ocbe-uio.github.io/bd4predict.
+If you use this software please cite:
+
+>Moreira-Soares Maurício (2025). BD4Predict: quality of life prediction tool for head and neck cancer survivors. https://ocbe-uio.github.io/bd4predict.
+
+And our manuscript, if relevant:
+
+>Moreira-Soares, M., Fossen, E. I., Bilbao-Jayo, A., Almeida, A., Lopez-Perez, L., Alonso, I., ... & LeBlanc, M. (2024). Joint probability approach for prognostic prediction of conditional outcomes: application to quality of life in head and neck cancer survivors. medRxiv, 2024-12.
+
 
